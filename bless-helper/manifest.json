@@ -1,16 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Bless Network Helper",
+  "name": "Bless Helper",
   "version": "1.0",
   "description": "Helper for Bless Network",
   "permissions": [
+    "activeTab",
+    "scripting",
     "storage",
-    "webRequest",
-    "activeTab"
+    "webRequest"
   ],
   "host_permissions": [
-    "https://bless.network/*",
-    "https://gateway-run.bls.dev/*"
+    "*://*.bless.network/*"
   ],
   "action": {
     "default_popup": "popup.html"

@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Bless Network Helper</title>
-  <style>
-    body {
-      width: 300px;
-      padding: 10px;
-    }
-    .info {
-      word-break: break-all;
-      margin: 10px 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Bless Network Helper</title>
+    <style>
+        body {
+            width: 400px;
+            padding: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        #output {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-  <h3>Bless Network Info</h3>
-  <div>
-    <strong>Auth Token:</strong>
-    <div id="token" class="info">-</div>
-  </div>
-  <div>
-    <strong>Latest NodeId:</strong>
-    <div id="nodeId" class="info">-</div>
-  </div>
-  <script src="popup.js"></script>
+    <div id="output">Loading...</div>
+    <script src="popup.js"></script>
 </body>
 </html>
