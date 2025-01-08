@@ -182,10 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 hardwareId: randomHardwareId,
                                 proxy: `http://${ip}:12323`
                             }
-                        ]
+                        ],
                     };
                     
-                    document.getElementById('output').textContent = JSON.stringify(config, null, 4);
+                    // 添加尾随逗号
+                    document.getElementById('output').textContent = JSON.stringify(config, null, 4).replace(/}$/,'},');
                 } else {
                     document.getElementById('output').textContent = 'Token not found';
                 }
@@ -195,20 +196,4 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error fetching IP:', error);
             document.getElementById('output').textContent = 'Error fetching IP';
         });
-
-    // 监听网络请求以获取nodeId
-    chrome.webRequest.onBeforeRequest.addListener(
-        function(details) {
-            try {
-                const url = new URL(details.url);
-                const nodeId = url.pathname.split('/').pop();
-                if (nodeId && nodeId.startsWith('12D3')) {
-                    chrome.storage.local.set({ nodeId: nodeId });
-                }
-            } catch (e) {
-                console.error('Error processing URL:', e);
-            }
-        },
-        { urls: ["*://*.bless.network/*"] }
-    );
 });

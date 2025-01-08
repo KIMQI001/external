@@ -10,7 +10,8 @@
     "webRequest"
   ],
   "host_permissions": [
-    "*://*.bless.network/*"
+    "*://*.bless.network/*",
+    "*://*.bls.dev/*"
   ],
   "action": {
     "default_popup": "popup.html"
