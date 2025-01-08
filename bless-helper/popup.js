@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             {
                                 nodeId: result.nodeId || '',
                                 hardwareId: randomHardwareId,
-                                proxy: `http://${ip}:12323`
+                                proxy: `http://14aa6bf8dceff:27b940ff43@${ip}:12323`
                             }
                         ],
                     };
