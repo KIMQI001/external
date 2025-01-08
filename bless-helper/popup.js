@@ -176,12 +176,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     const config = {
                         usertoken: result.authToken,
-                        nodeId: result.nodeId || '',
-                        proxy: `http://${ip}:8888`,
-                        hardwareId: randomHardwareId
+                        nodes: [
+                            {
+                                nodeId: result.nodeId || '',
+                                hardwareId: randomHardwareId,
+                                proxy: `http://${ip}:12323`
+                            }
+                        ]
                     };
                     
-                    document.getElementById('output').textContent = JSON.stringify(config, null, 2);
+                    document.getElementById('output').textContent = JSON.stringify(config, null, 4);
                 } else {
                     document.getElementById('output').textContent = 'Token not found';
                 }
