@@ -1,12 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Bless Auto Installer",
+  "name": "Bless Manager",
   "version": "1.0",
-  "description": "Auto installer for Bless extension",
+  "description": "Bless 插件管理助手",
   "permissions": [
     "management",
-    "tabs",
-    "scripting"
+    "tabs"
   ],
   "host_permissions": [
     "https://chromewebstore.google.com/*"
@@ -15,6 +14,14 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   }
 }

@@ -4,8 +4,25 @@ const BLESS_EXTENSION_IDS = [
     'plibcehnhcnofmkdbjolghdcjnmekia'    // 新ID
 ];
 
-async function checkAndInstallBless() {
+function showStatus(message, isError = false) {
     const status = document.getElementById('status');
+    status.textContent = message;
+    status.className = isError ? 'error' : 'success';
+    status.style.display = 'block';
+    setTimeout(() => {
+        status.style.display = 'none';
+    }, 3000);
+}
+
+async function installBless() {
+    chrome.tabs.create({
+        url: 'https://chromewebstore.google.com/detail/bless/pljbjcehnhcnofmkdbjolghdcjnmekia'
+    });
+    showStatus('正在打开安装页面...');
+}
+
+async function reinstallBless() {
+    let uninstalled = false;
     
     // 检查所有可能的扩展ID
     for (const extensionId of BLESS_EXTENSION_IDS) {
@@ -13,32 +30,31 @@ async function checkAndInstallBless() {
             await chrome.management.get(extensionId);
             // 如果找到了扩展，就卸载它
             await chrome.management.uninstall(extensionId, { showConfirmDialog: false });
-            status.textContent = '已卸载旧版本，正在安装新版本...';
-            status.className = 'success';
+            uninstalled = true;
         } catch (error) {
             console.log(`Extension ${extensionId} not found or error:`, error);
         }
+    }
+
+    if (uninstalled) {
+        showStatus('已卸载旧版本，正在打开安装页面...');
+    } else {
+        showStatus('未找到已安装的插件，正在打开安装页面...');
     }
 
     // 打开 Chrome 商店安装页面
     chrome.tabs.create({
         url: 'https://chromewebstore.google.com/detail/bless/pljbjcehnhcnofmkdbjolghdcjnmekia'
     });
-    status.textContent = '正在打开安装页面...';
-    status.className = 'success';
 }
 
-document.getElementById('reinstall').addEventListener('click', checkAndInstallBless);
-
-document.getElementById('checkStatus').addEventListener('click', async () => {
-    const status = document.getElementById('status');
+async function checkStatus() {
     let found = false;
 
     for (const extensionId of BLESS_EXTENSION_IDS) {
         try {
             const extension = await chrome.management.get(extensionId);
-            status.textContent = `Bless 插件状态：${extension.enabled ? '已启用' : '已禁用'} (版本 ${extension.version})`;
-            status.className = 'success';
+            showStatus(`Bless 插件已安装 (版本 ${extension.version})${extension.enabled ? '' : '，但未启用'}`);
             found = true;
             break;
         } catch (error) {
@@ -47,7 +63,10 @@ document.getElementById('checkStatus').addEventListener('click', async () => {
     }
 
     if (!found) {
-        status.textContent = 'Bless 插件未安装';
-        status.className = 'error';
+        showStatus('Bless 插件未安装', true);
     }
-});
+}
+
+document.getElementById('installBless').addEventListener('click', installBless);
+document.getElementById('reinstallBless').addEventListener('click', reinstallBless);
+document.getElementById('checkStatus').addEventListener('click', checkStatus);
