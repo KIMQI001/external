@@ -2,25 +2,19 @@
   "manifest_version": 3,
   "name": "Bless Helper",
   "version": "1.0",
-  "description": "Helper for Bless Network",
+  "description": "Helper for generating Bless configurations",
   "permissions": [
-    "activeTab",
-    "scripting",
     "storage",
-    "webRequest"
-  ],
-  "host_permissions": [
-    "*://*.bless.network/*",
-    "*://*.bls.dev/*"
+    "https://api.ipify.org/"
   ],
   "action": {
     "default_popup": "popup.html"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "background": {
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
