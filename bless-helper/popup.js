@@ -1,4 +1,4 @@
-// import { generateNodeData } from './gen_node.js';
+import { generateNodeData } from './gen_node.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // 获取真实IP
@@ -11,9 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
             chrome.storage.local.get(['authToken'], async function(result) {
                 if (result.authToken) {
                     try {
-                        // 生成符合 libp2p 格式的 nodeId
-                        // 格式: 12D3KooW + base58 编码的公钥
-                        const nodeId = await generateLibp2pNodeId();
+                        // 使用 gen_node.js 生成节点数据
+                        const nodeData = await generateNodeData();
 
                         // 随机选择一个hardwareId
                         const hardwareIds = [
@@ -186,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             usertoken: result.authToken,
                             nodes: [
                                 {
-                                    nodeId: nodeId,
+                                    nodeId: nodeData.peerPubKey,
                                     hardwareId: randomHardwareId,
                                     proxy: `http://14a08c27485fa:6c6e0a51ed@${ip}:12323`
                                 }
@@ -208,43 +207,3 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('output').textContent = 'Error fetching IP: ' + error.message;
         });
 });
-
-// 生成符合 libp2p 格式的 nodeId
-async function generateLibp2pNodeId() {
-    // 生成一个随机的 32 字节数组作为私钥
-    const privateKey = new Uint8Array(32);
-    crypto.getRandomValues(privateKey);
-
-    // 使用 SubtleCrypto 进行 Ed25519 密钥生成
-    const keyPair = await window.crypto.subtle.generateKey(
-        {
-            name: 'Ed25519',
-            namedCurve: 'Ed25519'
-        },
-        true,
-        ['sign', 'verify']
-    );
-
-    // 导出公钥
-    const publicKey = await window.crypto.subtle.exportKey('raw', keyPair.publicKey);
-
-    // 转换为 base58 编码
-    const publicKeyBytes = new Uint8Array(publicKey);
-    const base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-    let base58 = '';
-
-    // 简单的 base58 编码实现
-    let num = BigInt(0);
-    for (let i = 0; i < publicKeyBytes.length; i++) {
-        num = num * BigInt(256) + BigInt(publicKeyBytes[i]);
-    }
-
-    while (num > 0) {
-        const mod = num % BigInt(58);
-        base58 = base58Chars[Number(mod)] + base58;
-        num = num / BigInt(58);
-    }
-
-    // 添加前缀 "12D3KooW"
-    return '12D3KooW' + base58;
-}

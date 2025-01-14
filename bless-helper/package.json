@@ -1,0 +1,9 @@
+{
+  "name": "bless-helper",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@libp2p/crypto": "^2.0.3",
+    "@libp2p/peer-id": "^3.0.2"
+  }
+}
