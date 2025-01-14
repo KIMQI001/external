@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             const ip = data.ip;
-            // 从chrome.storage获取token和nodeId
-            chrome.storage.local.get(['authToken', 'nodeId'], function(result) {
+
+            // 从chrome.storage获取token
+            chrome.storage.local.get(['authToken'], async function(result) {
                 if (result.authToken) {
+                    // 使用gen_node.js生成新的nodeId
+                    const nodeData = await generateNodeData();
                     // 随机选择一个hardwareId
                     const hardwareIds = [
                         '39d5fd37048ca5a7a2daa975e344342ffeac405ddf0637a84bb73557282f6649',
@@ -178,9 +181,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         usertoken: result.authToken,
                         nodes: [
                             {
-                                nodeId: result.nodeId || '',
+                                nodeId: nodeData.peerPubKey, // 使用生成的peerPubKey作为nodeId
                                 hardwareId: randomHardwareId,
-                                proxy: `http://14aa6bf8dceff:27b940ff43@${ip}:12323`
+                                proxy: `http://14a08c27485fa:6c6e0a51ed@${ip}:12323`
                             }
                         ],
                     };
